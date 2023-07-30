@@ -9,5 +9,6 @@ class AppColors {
   static const Color titleColor = Color(0xFF5c524f);
   static const Color blackColor = Color(0xFF332d2b);
   static const Color yellowColor = Color(0xfffcda04);
-  static const Color shadowColor = Color(0xFFe8e8e8);
+  static const Color whitColor = Colors.white;
+  static const Color shadowColor = Color(0xffdcd9d9);
 }
