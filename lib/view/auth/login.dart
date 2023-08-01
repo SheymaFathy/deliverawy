@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:deliverawy/constant/colors.dart';
 import 'package:deliverawy/view/auth/signup.dart';
+import 'package:deliverawy/view/screens/products.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/custom_btn.dart';
 import '../../components/custom_textfeild1.dart';
 
@@ -13,11 +17,13 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   bool passwordVisible = false;
   bool Issecure = true;
+  late double lat, long;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -193,6 +199,7 @@ class _LogInState extends State<LogIn> {
                             child: CustomBtn(
                               onTapBtn: () {
                                 if (formKey.currentState!.validate()) {
+                                  login("${emailController.text}","${passwordController.text}");
                                 }
                               },
                               btnText: 'تأكيد',
@@ -225,7 +232,9 @@ class _LogInState extends State<LogIn> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                SignupPage()));
+                                                SignupPage(
+
+                                                )));
                                   },
                                   child: const Text('سجل الآن',
                                       style: TextStyle(
@@ -247,7 +256,48 @@ class _LogInState extends State<LogIn> {
         ),
       ),
     );
-  }
 
+  }
+  void login(String email,String password) async {
+    Uri url = Uri.parse('http://192.168.252.95/deliverawy/auth/login.php?email=${email}&password=${password}');
+    var response = await http.get(url);
+    // Send the POST request
+
+    // Process the response
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      if(jsonResponse["status"]=="success"){
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('id', jsonResponse["id"]);
+        prefs.setString('oner', jsonResponse["oner"]);
+        prefs.setString('email', jsonResponse["email"]);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const products()));
+      }else if(jsonResponse["status"]=="failed"){
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: Text("${jsonResponse["message"]}"),
+              actions: [
+                TextButton(
+                  child: Text('حاول مره اخرى'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+
+
+      }
+
+    } else {
+      print('POST request failed! Status code: ${response.statusCode}');
+    }
+  }
 
 }

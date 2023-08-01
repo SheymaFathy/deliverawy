@@ -1,8 +1,9 @@
 import 'package:deliverawy/view/auth/login.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constant/colors.dart';
-
+late SharedPreferences saveddata;
 void main() {
   runApp(const MyApp());
 }

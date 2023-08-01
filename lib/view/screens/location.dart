@@ -16,7 +16,7 @@ class myLocation extends StatefulWidget {
 class _myLocationState extends State<myLocation> {
 
   var myMarkers = HashSet<Marker>();
-  late double lat, lan;
+  late double lat, long;
 
 
   @override
@@ -66,7 +66,7 @@ class _myLocationState extends State<myLocation> {
 
                     });
                     lat = location.latitude;
-                    lan= location.longitude;
+                    long= location.longitude;
                   },
                   initialCameraPosition: CameraPosition(
                     target: LatLng(30.011912109198054, 31.20804801660021),
@@ -94,7 +94,7 @@ class _myLocationState extends State<myLocation> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SignupPage(lan: lan, lat: lat, )));
+                            builder: (context) => SignupPage( )));
 
                   }),
             ],
