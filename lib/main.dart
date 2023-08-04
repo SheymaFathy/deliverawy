@@ -1,4 +1,5 @@
 import 'package:deliverawy/view/auth/login.dart';
+import 'package:deliverawy/view/screens/welcome%20screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor)
 
       ),
-      home: LogIn()
+      home: StartPage()
     );
   }
 }

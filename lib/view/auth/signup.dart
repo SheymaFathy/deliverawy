@@ -1,18 +1,13 @@
-import 'dart:convert';
 import 'dart:core';
 import 'package:deliverawy/constant/colors.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/custom_btn.dart';
 import '../../components/custom_textfeild1.dart';
 import '../../service/functions.dart';
-import '../../service/links.dart';
 import '../screens/location.dart';
-import '../screens/products.dart';
-import 'login.dart';
 
-class SignupPage extends StatefulWidget {late double lat, long;
+
+class SignupPage extends StatefulWidget {
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
@@ -31,8 +26,10 @@ class _SignupPageState extends State<SignupPage> {
   bool passwordVisible = false;
   bool Issecure = true;
 
+  late double lat, long;
 
   @override
+
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -76,45 +73,20 @@ class _SignupPageState extends State<SignupPage> {
                           SizedBox(
                             height: 15,
                           ),
-                          Center(
-                            child: Text(
-                              "مرحبًا بك يرجى تسجيل بياناتك الآن",
-                              style: TextStyle(
-                                  color: Colors.black87.withOpacity(0.47),
-                                  fontSize: 13,
-                                  fontFamily: "ca1",
-                                  fontWeight: FontWeight.bold),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "مرحبًا بك يرجى تسجيل بياناتك ",
+                                style: TextStyle(
+                                    color: Colors.black87.withOpacity(0.47),
+                                    fontSize: 15,
+                                    fontFamily: "ca1",
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (context) => myLocation()));
-                          //   },
-                          //   child: Container(
-                          //     margin: EdgeInsets.only(right: 15.0),
-                          //     padding: EdgeInsets.all(10.0),
-                          //     decoration: BoxDecoration(
-                          //         color: Colors.white,
-                          //         borderRadius: BorderRadius.circular(15.0)),
-                          //     child: Row(
-                          //       children: <Widget>[
-                          //         Icon(
-                          //           Icons.location_on_outlined,
-                          //           size: 30.0,
-                          //           color: AppColors.iconColor,
-                          //         ),
-                          //         Text(
-                          //           "اخترالموقع",
-                          //           style: TextStyle(
-                          //               fontSize: 15.0, fontFamily: 'ca1'),
-                          //         )
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
+
                           Padding(
                             padding: EdgeInsets.only(
                                 top: MediaQuery
@@ -266,8 +238,17 @@ class _SignupPageState extends State<SignupPage> {
                                   .width * 0.07,
                             ),
                             child: CustomBtn(
-                              onTapBtn: () async {
-                               await signUp();
+                              onTapBtn: ()  {
+                                if (formKey.currentState != null &&
+                                    formKey.currentState!.validate()){
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context)=>myLocation(
+                                      oner: onerController.toString(),
+                                      email: emailController.toString(),
+                                      password: passwordController.toString(),
+                                      phone: phoneController.toString(),
+                                      area: areaController.toString(),
+                                      Shop_name: shopController.toString(),)));}
                               },
                               btnText: 'تأكيد',
                             ),
@@ -295,10 +276,10 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => LogIn()));
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => AdminPanal()));
                                   },
                                   child: const Text('سجل دخول الآن',
                                       style: TextStyle(
@@ -321,30 +302,4 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
   }
-
-  signUp() async {
-    var response = await myfun.postRequest(linkSignUp, {
-      "oner": onerController.text,
-      "email": emailController.text,
-      "password": passwordController.text,
-      "phone": phoneController.text,
-      "shop_name": shopController.text,
-      "area": areaController.text,
-    });
-    if (response["status"] == "sccess") {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('oner', onerController.text);
-        prefs.setString('email', emailController.text);
-        prefs.setString('password', passwordController.text);
-        prefs.setString('shop_name', shopController.text);
-        prefs.setString('area', areaController.text);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => myLocation()));
-      } else {
-        print("Sign Up feild");
-      }
-    }
-  }
-
-
-
+}
