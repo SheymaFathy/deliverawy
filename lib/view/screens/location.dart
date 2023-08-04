@@ -111,7 +111,7 @@ class _myLocationState extends State<myLocation> {
               CustomBtn(onTapBtn: () async {
 
               dynamic response = await http.post(Uri.parse(
-                  "$linkServerName/auth/signup.php =? oner = ${'oner'} & email = ${'email'}& password =${'password'} & phone =${'phone'} & shop_name = ${'shop_name'} & area =${'area'} & lat = ${lat} & long = ${long}"));
+                  "$linkServerName/auth/signup.php? oner = ${widget.oner} & email = ${widget.email}& password =${widget.password} & phone =${widget.phone} & shop_name = ${widget.Shop_name} & area =${widget.area} & lat = ${lat} & long = ${long}"));
               print(response.statusCode);
               if (response.statusCode == 200) {
                 String result = response.body;
